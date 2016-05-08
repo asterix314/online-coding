@@ -4,7 +4,19 @@
 int deduce(char rtilt[], char left[], char right[]) {
   int light = 0;
   int heavy = 0;
-  return 0;
+  int ncoins = strlen(left);
+  for(int i=0; i<ncoins; i++) {
+    switch (rtilt[0]) {
+    case 'u':
+      light |= 1 << (left[i] - 'A');
+    case 'd':
+    case 'e':
+    default:
+    }
+
+  }
+  printf("DEBUG: deduce returning: %X\n", (heavy << sizeof(int)/2) + light);
+  return (heavy << sizeof(int)/2) + light;
 }
 
 
@@ -24,7 +36,7 @@ int main() {
       // assuming nothing unexpected from input
       if (3 != scanf("%s %s %s", left, right, rtilt)) 
 	return 0;
-      coin_flags |= deduce(rtilt, left, right);
+      coin_flags &= deduce(rtilt, left, right);
     }
     counterfeit = ffs(coin_flags);
     printf("%c is the counterfeit coin and it is %s.\n",
