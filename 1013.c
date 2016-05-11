@@ -1,19 +1,23 @@
 #include <stdio.h>
 #include <strings.h>
 
+// return the counterfeit bit pattern by analysing the weighting 
 int deduce(char rtilt[], char left[], char right[]) {
   int light = 0;
   int heavy = 0;
-  int ncoins = strlen(left);
-  for(int i=0; i<ncoins; i++) {
-    switch (rtilt[0]) {
+  int left_bits = 0;
+  int right_bits = 0;
+  int k = strlen(left);
+  for(int i=0; i<k; i++) {
+      left_bits |= 1 << (left[i] - 'A');
+      right_bits |= 1 << (right[i] - 'A');
+  }
+  switch (rtilt[0]) {
     case 'u':
-      light |= 1 << (left[i] - 'A');
+	
     case 'd':
     case 'e':
     default:
-    }
-
   }
   printf("DEBUG: deduce returning: %X\n", (heavy << sizeof(int)/2) + light);
   return (heavy << sizeof(int)/2) + light;
