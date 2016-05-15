@@ -3,7 +3,7 @@
 
 
 /***
- counterfeit flags bit pattern
+ counterfeit flags bit pattern example
  1 = possible counterfeit
 
  ----LKJIHGFEDCBA ----LKJIHGFEDCBA
@@ -15,20 +15,16 @@
 // return the counterfeit bit pattern by analysing the weighting 
 int deduce(char rtilt[], char left[], char right[]) {
 
-  printf("DEBUG: left = %s, right = %s, rtilt = %s\n", left, right, rtilt);
-
   int left_bits = 0;
   int right_bits = 0;
   int guesses = 0;
 
-  // collect the coins in the scale 
+  // collect the left and right coins
   int len = strlen(left);
   for(int i=0; i<len; i++) {
       left_bits |= 1 << (left[i] - 'A');
       right_bits |= 1 << (right[i] - 'A');
   }
-
-  printf("DEBUG: left_bits = %x, right_bits = %x\n", left_bits, right_bits);
   
   switch (rtilt[0]) {
   case 'u': // right up: (left) > (right)
@@ -42,7 +38,6 @@ int deduce(char rtilt[], char left[], char right[]) {
     guesses += guesses << (sizeof(int) * 4);
   }
   
-  printf("DEBUG: guesses = %x\n", guesses);
   return guesses;
 }
 
@@ -69,9 +64,9 @@ int main() {
 	return 0;
       guesses &= deduce(rtilt, left, right);
     }
-    printf("DEBUG: final guesses = %x\n", guesses);
+  
     // find first set (1 if odd)
-    counterfeit = ffs(guesses);
+    counterfeit = __builtin_ffs(guesses);
     heavy = counterfeit > sizeof(int) * 4;
     printf("%c is the counterfeit coin and it is %s.\n",
 	   'A' - 1 + (heavy ? counterfeit - sizeof(int) * 4 : counterfeit),
