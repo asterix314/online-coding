@@ -5,34 +5,41 @@
 #define max4(a, b, c, d) max2(max2(a, b), max2(c, d))
 
 typedef struct {
-  char row;
-  char col;
+  short hight;
   short npaths;
-} measure_t;
+} spot_t;
 
-int f(char nrow, char ncol) {
-  short terrain[nrow][ncol];
-  measure_t measures[nrow][ncol];
-  for(int i=0; i<nrow; i++)
-    for(int j=0; j<ncol; j++) {
-      
-scanf("%hd",terrain+i*ncol+j);
-      measures[i][j].row = i;
-      measures[i][j].col = j;
-      measures[i][j].npaths = 0;
-printf("terrain[%c][%c] = %d\n", i, j, terrain[i][j]);
-    }
-return 0;
+
+spot_t *TERRAIN = NULL;
+
+int comp(int *i1, int *i2) {
+  return TERRAIN[*i1].hight - TERRAIN[*i2].hight;
 }
 
-int main() {
+void solve(int rows, int cols) {
+  
+  spot_t terrain[rows*cols];
+  int index[rows*cols];
 
-  char nrow = 0;
-  char ncol = 0;
-  if (2 != scanf("%c %c", &nrow, &ncol))
-    return 0;
+  TERRAIN = terrain;
   
-  short terrain[nrow][ncol];
+  for(int i=0; i<rows*cols; i++) {
+      scanf("%hd", &(terrain[i].hight));
+      terrain[i].npaths = 0;
+      index[i] = i;
+  }
+
+  qsort(index, rows*cols, sizeof(int), comp);
+
+  for(int i=0; i<rows*cols; i++) {
+    printf("index[%d] = %d\n", i, index[i]);
+  }
   
-  return 0;
+}
+
+void main() {
+  int rows = 0;
+  int cols = 0;
+  scanf("%d %d", &rows, &cols);
+  solve(rows, cols);
 }
