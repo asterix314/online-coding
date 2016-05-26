@@ -16,15 +16,7 @@ int comp(int *i1, int *i2) {
   return TERRAIN[*i1].hight - TERRAIN[*i2].hight;
 }
 
-inline int steps(int r, int c, int rows, int cols) {
-
-  return  max4((c-1 < 0)     ? 0 : TERRAIN[r*cols+c-1].steps,
-	       (r+1 >= rows) ? 0 : TERRAIN[(r+1)*cols+c].steps,
-	       (c+1 >= cols) ? 0 : TERRAIN[r*cols+c+1].steps,
-	       (r-1 < 0)     ? 0 : TERRAIN[(r-1)*cols+c].steps);
-}
-
-int solve(int rows, int cols) {
+int max_steps(int rows, int cols) {
   
   spot_t terrain[rows*cols]; // automatic memory allocation
   int index[rows*cols];
@@ -41,15 +33,19 @@ int solve(int rows, int cols) {
   // traverse spots in order of increasing hight
   int max_steps = 0;
   for(int i=0; i<rows*cols; i++) {
-    int r, c, steps;
+    int r, c, h;
+    int steps, s1, s2, s3, s4;
     r = index[i] / cols; // recover row
     c = index[i] % cols; // recover column
+    h = terrain[index[i]].hight;
     
-    steps = 1 + max4((c-1 < 0)     ? 0 : TERRAIN[r*cols+c-1].steps,
-		     (r+1 >= rows) ? 0 : TERRAIN[(r+1)*cols+c].steps,
-		     (c+1 >= cols) ? 0 : TERRAIN[r*cols+c+1].steps,
-		     (r-1 < 0)     ? 0 : TERRAIN[(r-1)*cols+c].steps);
+    s1 = (c-1 < 0 || h <= terrain[r*cols+c-1].hight)       ? 0 : terrain[r*cols+c-1].steps;
+    s2 = (r+1 >= rows || h <= terrain[(r+1)*cols+c].hight) ? 0 : terrain[(r+1)*cols+c].steps;
+    s3 = (c+1 >= cols || h <= terrain[r*cols+c+1].hight)   ? 0 : terrain[r*cols+c+1].steps;
+    s4 = (r-1 < 0 || h <= terrain[(r-1)*cols+c].hight)     ? 0 : terrain[(r-1)*cols+c].steps;
+  
 
+    steps = 1 + max4(s1, s2, s3, s4);
     max_steps = (steps > max_steps) ? steps : max_steps;
     terrain[index[i]].steps = steps;   
   }
@@ -60,5 +56,5 @@ int solve(int rows, int cols) {
 void main() {
   int rows, cols;
   scanf("%d %d", &rows, &cols);
-  printf("%d\n", solve(rows, cols));
+  printf("%d\n", max_steps(rows, cols));
 }
