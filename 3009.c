@@ -7,14 +7,17 @@
 
 #define MAX_SIZE 20
 
-unsigned count_black(unsigned w,  unsigned h) {
-  char tiles[MAX_SIZE][MAX_SIZE+1] = {0};
-  unsigned q[MAX_SIZE * MAX_SIZE] = {0};
-  unsigned head = 0;
-  unsigned count = 0;
-  unsigned x = 0;
-  unsigned y = 0;
-  const char * vp = NULL;
+typedef struct {
+  int brk_x, brk_y;
+  int x, y;
+  int prev;
+} node;
+
+int solve_curl(int w,  int h) {
+  char board[MAX_SIZE][MAX_SIZE] = {0};
+  node q[2 * MAX_SIZE * MAX_SIZE] = {0};
+  int head = 0;
+  int count = 0;
 
 #define get_x(p) ((p) % (1<<16))
 #define get_y(p) ((p) >> 16)
@@ -25,7 +28,7 @@ unsigned count_black(unsigned w,  unsigned h) {
     tiles[y][x] = '@';                          \
   }
   
-  // lay tiles and enqueue first visited position
+  /*
   for (unsigned i=0; i<h; ++i) {
     scanf("%s", tiles[i]);
     vp  = strchr(tiles[i], '@');
@@ -48,15 +51,16 @@ unsigned count_black(unsigned w,  unsigned h) {
     if (y+1 < h && '.' == tiles[y+1][x])
       enqueue(x, y+1);
   }
+  */
   return count;
 }
 
 int main() {
-  unsigned w = 0;
-  unsigned h = 0;
+  int w = 0;
+  int h = 0;
   
-  while (2 == scanf("%u %u", &w, &h) && w && h)
-    printf("%u\n", count_black(w, h));
+  while (2 == scanf("%d %d", &w, &h) && w>0 && h>0)
+    printf("%u\n", solve_curl(w, h));
   
   return EXIT_SUCCESS;
 }
