@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-const bool COPRIME[51][51] = {
+const bool coprime[51][51] = {
     0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
     0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,
@@ -56,20 +56,27 @@ const bool COPRIME[51][51] = {
     0,1,0,1,0,0,0,1,0,1,0,1,0,1,0,0,0,1,0,1,0,1,0,1,0,0,0,1,0,1,0,1,0,1,0,0,0,1,0,1,0,1,0,1,0,0,0,1,0,1,0
 };
 
-void solve(unsigned const a[], unsigned n) {
+bool connected(unsigned const a[], unsigned n) {
     unsigned r[51] = {
         0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,
         26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50};
-    for (unsigned i=1; i<n; ++i)
+
+    for (unsigned i=1; i<n; ++i) {
         for (unsigned j=i+1; j<=n; ++j) {
-            if (COPRIME[a[i]][a[j]])
+            if (coprime[a[i]][a[j]])
                 r[i] = r[j] = r[i]>r[j] ? r[j] : r[i];
         }
+        if (r[i] != 1)
+            return false;
+    }
+    return r[n] == 1;
+/*
     printf("debug: r[] = ");
     for (unsigned i=0; i<=n; ++i) {
         printf("%u ", r[i]);
     }
     printf("\n");
+*/
 }
 
 int main(void) {
@@ -82,7 +89,14 @@ int main(void) {
         for (unsigned j=1; j<=n; ++j) {
             scanf("%u", a+j);
         }
-        solve(a, n);
+        bool conn = false;
+        conn = connected(a, n);
+        printf("%d\n%u",
+            conn ? 0 : 1,
+            conn ? a[1] : a[1] == 29 ? 31 : 29);
+        for (unsigned i=2; i<=n; ++i)
+            printf(" %u", a[i]);
+        printf("\n");
     }
     return EXIT_SUCCESS;
 }
