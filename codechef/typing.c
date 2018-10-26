@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const unsigned cache_size = 1031;
-const unsigned word_size = 20;
+#define CACHE_SIZE 1031
+#define WORD_SIZE 20
 
 typedef struct {
     size_t word;
@@ -25,9 +25,9 @@ unsigned get_cost(const char str[], node_t cache[]) {
         ++i;
     }
     // search the cache
-    unsigned idx = word % cache_size;
+    unsigned idx = word % CACHE_SIZE;
     while (cache[idx].cost && cache[idx].word != word) {
-        idx = (idx + 1) % cache_size;
+        idx = (idx + 1) % CACHE_SIZE;
     }
     if (cache[idx].cost) {  // found
         return (cache[idx].cost / 2);
@@ -39,8 +39,8 @@ unsigned get_cost(const char str[], node_t cache[]) {
 
 void solve(unsigned n) {
     unsigned cost = 0;
-    node_t cache[cache_size] = {0};
-    char str[word_size+1];
+    node_t cache[CACHE_SIZE] = {0};
+    char str[WORD_SIZE+1];
     for (unsigned i=0; i<n; ++i) {
         scanf("%s", str);
         cost += get_cost(str, cache);
