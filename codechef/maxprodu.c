@@ -13,15 +13,10 @@ unsigned prod(unsigned x, unsigned k, unsigned j) {
 }
 
 void solve(unsigned n, unsigned k) {
-  if (n < k*(k+1)/2) {
-    printf("-1\n");
-    return;   
-  }
   unsigned j = k - (n - k*(k+1)/2) % k;
   unsigned x = (n + j - k*(k+1)/2) / k;
   
-  if (k*x + k*(k+1)/2 == n + j) { // solvable
-    // printf("x=%d, j=%d\n", x, j);
+  if (n >= k*(k+1)/2 && k*x + k*(k+1)/2 == n + j) { // solvable
     printf("%u\n", prod(x, k, j));
   } else {
     printf("-1\n");
