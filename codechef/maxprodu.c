@@ -2,31 +2,35 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define MODULO 1000000007
-
-void solve(unsigned n, unsigned k) {
-  unsigned j = k - (n - k*(k+1)/2) % k;
-  unsigned x = (n + j - k*(k+1)/2) / k;
-  
-  if (x>0 && j>=1 && k*x + k*(k+1)/2 == n + j) { // solvable
-    // printf("x=%u, j=%u\n", x, j);
-    size_t x1 = x;
-    size_t ans = x1*(x1-1) % MODULO;
-    for (unsigned i=1; i<=k; ++i) {
-      ans = ans*(i==j ? 1 : (x1+i)*(x1+i-1)) % MODULO; 
+int prod(int x, int k, int j) {
+    const int modulo = 1000000007;
+    long long x1 = x;
+    long long prod = 1;
+    for (int i=0; i<=k; ++i) {
+      prod = prod * (i==j ? 1 : (x1+i) * (x1+i-1)) % modulo;
+      if (!prod) return 0; 
     }
-    printf("%zu\n", ans);
+    return (int) prod;
+}
+
+void solve(int n, int k) {
+  int j = k - (n - k*(k+1)/2) % k;
+  int x = (n + j - k*(k+1)/2) / k;
+  
+  if (x>0 && j>=1 && j <=k && k*x + k*(k+1)/2 == n + j) { // solvable
+    // printf("x=%d, j=%d\n", x, j);
+    printf("%d\n", prod(x, k, j));
   } else {
-    printf("%d\n", -1);
+    printf("-1\n");
   }
 }
 
 int main(void) {
-  unsigned t=0;
-  scanf("%u", &t);
-  for (unsigned i=0; i<t; ++i) {
-    unsigned n=0, k=0;
-    scanf("%u %u", &n, &k);
+  int t=0;
+  scanf("%d", &t);
+  for (int i=0; i<t; ++i) {
+    int n=0, k=0;
+    scanf("%d %d", &n, &k);
     solve(n, k);
   }
   return EXIT_SUCCESS;
